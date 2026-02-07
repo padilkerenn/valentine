@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Valentine Kicaa ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffffff);
+    color: #d63384;
+    overflow-x: hidden;
+}
+
+section {
+    display: none;
+    opacity: 0;
+    min-height: 100vh;
+    padding: 40px 20px;
+    transition: opacity 1s ease;
+}
+
+section.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+
+#hero { text-align: center; }
+
+.name {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.name span {
+    font-size: 3.5rem;
+    font-weight: 600;
+    opacity: 0;
+    animation: showLetter 0.6s forwards;
+    text-shadow: 0 0 20px rgba(255,107,157,0.9);
+}
+
+.name span:nth-child(1){ animation-delay: 0.2s; }
+.name span:nth-child(2){ animation-delay: 0.4s; }
+.name span:nth-child(3){ animation-delay: 0.6s; }
+.name span:nth-child(4){ animation-delay: 0.8s; }
+.name span:nth-child(5){ animation-delay: 1s; }
+
+@keyframes showLetter {
+    from { opacity: 0; transform: translateY(20px) scale(0.8); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.photo-wrapper {
+    margin: 20px 0;
+    width: 220px;
+    height: 220px;
+    background-image: url("bunga.jpg");
+    background-size: cover;
+    background-position: center;
+    border-radius: 25px;
+    border: 5px solid #ff6b9d;
+    box-shadow: 0 0 30px rgba(255,107,157,0.8);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+button {
+    margin-top: 25px;
+    padding: 14px 35px;
+    border: none;
+    border-radius: 50px;
+    background: #ff6b9d;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255,107,157,0.8);
+}
+
+#message {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    max-width: 800px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(255,107,157,0.5);
+}
+
+#typing {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    white-space: pre-line;
+    min-height: 300px;
+}
+
+.falling-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.heart {
+    position: absolute;
+    font-size: 20px;
+    animation: fall 6s linear infinite;
+}
+
+@keyframes fall {
+    from { transform: translateY(-10vh); }
+    to { transform: translateY(110vh); }
+}
+
+#interactive {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    box-shadow: 0 0 30px rgba(255,107,157,0.5);
+}
+
+.buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+#no {
+    background: #f1f1f1;
+    color: #d63384;
+    position: fixed;
+}
+
+#closing img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid #ff6b9d;
+    box-shadow: 0 0 30px rgba(255,107,157,0.8);
+    margin: 20px 0;
+    animation: float 3s ease-in-out infinite;
+}
+
+.confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.confetti div {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background: #ff6b9d;
+    animation: confetti 3s linear infinite;
+}
+
+@keyframes confetti {
+    from { transform: translateY(-10vh) rotate(0); }
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="masa ini.mp3" type="audio/mpeg">
+</audio>
+
+<div class="falling-hearts" id="hearts"></div>
+<div class="confetti" id="confetti"></div>
+
+<section id="hero" class="active">
+    <div class="name"><span>K</span><span>i</span><span>c</span><span>a</span><span>a</span></div>
+    <div class="photo-wrapper"></div>
+    <p>Happy Valentine kicaaa 💕</p>
+    <button onclick="startLove()">Klik di sini 💖</button>
+</section>
+
+<section id="message">
+    <div id="typing"></div>
+    <button onclick="nextSection('interactive')">Lanjut 💘</button>
+</section>
+
+<section id="interactive">
+    <h2>Will you be my Valentine? 💍</h2>
+    <div class="buttons">
+        <button onclick="yes()">YES 💖</button>
+        <button id="no">NO 😝</button>
+    </div>
+</section>
+
+<section id="closing">
+    <h1>LOBIUUUU KICAAA 💕</h1>
+    <img src="kicaa.jpg" onclick="alert('aku sayang kamu 🤍')">
+    <p id="closingText"></p>
+</section>
+
+<script>
+const music = document.getElementById("bgMusic");
+music.volume = 0;
+
+const messageText = `
+Kicaaa,
+
+Terimakasih yaa udahh hadir di hidup aku.
+Kamu adalah alasan kenapa aku bisa tersenyum
+bahkan di hari yang paling capee.
+
+maafin aku kalo aku bikin kamu cape ataupun
+sakit hati, aku mungkin gaa sempurna,
+tapi cinta ke kamu selalu utuh.
+aku juga gaakan nyerah sama kamu.
+
+aku suka semua hal tentang kamu,
+cara kamu ketawa,
+cara kamu cerita hal kecil,
+dan cara kamu selalu bikin aku ngerasa cukup.
+
+sama kamu, aku belajar sabar,
+belajar ngertiin,
+dan belajar apa artinya pulang.
+kamu bukan cuma orang yang aku sayang,
+tapi juga rumah buat hati aku.
+
+Happy Valentine, Kicaa 💖
+`;
+
+let index = 0;
+function typeMessage(){
+    if(index < messageText.length){
+        typing.innerHTML += messageText.charAt(index++);
+        setTimeout(typeMessage, 20);
+    }
+}
+
+function fadeInMusic(){
+    let v = 0;
+    const fade = setInterval(()=>{
+        if(v < 1){ v += 0.02; music.volume = v; }
+        else clearInterval(fade);
+    },100);
+}
+
+function startLove(){
+    music.play().catch(()=>{});
+    fadeInMusic();
+    nextSection("message");
+    typeMessage();
+}
+
+function nextSection(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+const noTexts = ["eh 😝","ngga bisaa","hehe kabur","coba lagi 😜"];
+let noIndex = 0;
+const noBtn = document.getElementById("no");
+
+function moveNo(){
+    noBtn.innerText = noTexts[noIndex++ % noTexts.length];
+
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+    noBtn.style.left = Math.random()*maxX + "px";
+    noBtn.style.top = Math.random()*maxY + "px";
+
+    if(navigator.vibrate) navigator.vibrate(50);
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+function yes(){
+    nextSection("closing");
+    launchConfetti();
+    typeClosing();
+}
+
+const closingText = "Aku harap kamu senyum pas baca ini 🤍";
+let c = 0;
+function typeClosing(){
+    if(c < closingText.length){
+        closingTextEl.innerHTML += closingText.charAt(c++);
+        setTimeout(typeClosing,60);
+    }
+}
+const closingTextEl = document.getElementById("closingText");
+
+function hearts(){
+    const emojis = ["❤️","💖","💘","💞","🌸"];
+    setInterval(()=>{
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = Math.random()*100+"vw";
+        h.style.fontSize = Math.random()*20+15+"px";
+        heartsEl.appendChild(h);
+        setTimeout(()=>h.remove(),6000);
+    },300);
+}
+const heartsEl = document.getElementById("hearts");
+
+function launchConfetti(){
+    for(let i=0;i<80;i++){
+        const p = document.createElement("div");
+        p.style.left = Math.random()*100+"vw";
+        p.style.animationDelay = Math.random()*2+"s";
+        confetti.appendChild(p);
+    }
+}
+const confetti = document.getElementById("confetti");
+
+hearts();
+</script>
+
+</body>
+</html>
