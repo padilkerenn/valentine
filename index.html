@@ -18,13 +18,13 @@ body {
     overflow-x: hidden;
 }
 
-/* ===== SECTION ===== */
+/* SECTION */
 section {
     display: none;
     opacity: 0;
     min-height: 100vh;
     padding: 40px 20px;
-    transition: opacity 0.8s ease;
+    transition: opacity 1s ease;
 }
 
 section.active {
@@ -35,7 +35,7 @@ section.active {
     opacity: 1;
 }
 
-/* ===== HERO ===== */
+/* HERO */
 #hero { text-align: center; }
 
 .name {
@@ -63,7 +63,7 @@ section.active {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ===== FLOWER ===== */
+/* FLOWER */
 .photo-wrapper {
     margin: 20px 0;
     width: 220px;
@@ -82,7 +82,7 @@ section.active {
     50% { transform: translateY(-10px); }
 }
 
-/* ===== BUTTON ===== */
+/* BUTTON */
 button {
     margin-top: 25px;
     padding: 14px 35px;
@@ -97,9 +97,10 @@ button {
 
 button:hover {
     transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255,107,157,0.8);
 }
 
-/* ===== MESSAGE ===== */
+/* MESSAGE */
 #message {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -115,26 +116,7 @@ button:hover {
     min-height: 300px;
 }
 
-/* ===== HEARTS ===== */
-.falling-hearts {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.heart {
-    position: absolute;
-    font-size: 20px;
-    animation: fall 6s linear infinite;
-}
-
-@keyframes fall {
-    from { transform: translateY(-10vh); }
-    to { transform: translateY(110vh); }
-}
-
-/* ===== INTERACTIVE ===== */
+/* INTERACTIVE */
 #interactive {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -149,26 +131,16 @@ button:hover {
     margin-top: 30px;
 }
 
-/* YES NORMAL */
-#yes {
-    font-size: 1.2rem;
+#no {
+    background: #f1f1f1;
+    color: #d63384;
 }
 
-/* YES BIG */
-#yes.big {
-    transform: scale(1.6);
-    box-shadow: 0 0 40px rgba(255,107,157,1);
+/* CLOSING */
+#closing {
+    text-align: center;
 }
 
-/* NO HIDE */
-#no.hide {
-    opacity: 0;
-    transform: scale(0.3);
-    pointer-events: none;
-    transition: 0.4s ease;
-}
-
-/* ===== CLOSING ===== */
 #closing img {
     width: 200px;
     height: 200px;
@@ -179,7 +151,31 @@ button:hover {
     animation: float 3s ease-in-out infinite;
 }
 
-/* ===== CONFETTI ===== */
+/* FALLING EMOJI */
+.falling-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.fall-item {
+    position: absolute;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* CONFETTI */
 .confetti {
     position: fixed;
     inset: 0;
@@ -199,6 +195,13 @@ button:hover {
     from { transform: translateY(-10vh) rotate(0); }
     to { transform: translateY(110vh) rotate(360deg); }
 }
+
+/* MOBILE */
+@media (max-width:768px){
+    .name span { font-size: 2.5rem; }
+    .photo-wrapper { width: 170px; height: 170px; }
+    #closing img { width: 160px; height: 160px; }
+}
 </style>
 </head>
 
@@ -212,9 +215,13 @@ button:hover {
 <div class="confetti" id="confetti"></div>
 
 <section id="hero" class="active">
-    <div class="name"><span>K</span><span>i</span><span>c</span><span>a</span><span>a</span></div>
+    <div class="name">
+        <span>K</span><span>i</span><span>c</span><span>a</span><span>a</span>
+    </div>
+
     <div class="photo-wrapper"></div>
-    <p>Happy Valentine kicaaa 💕</p>
+
+    <p>Happy Valentinee kicaaa 💕</p>
     <button onclick="startLove()">Klik di sini 💖</button>
 </section>
 
@@ -224,22 +231,24 @@ button:hover {
 </section>
 
 <section id="interactive">
-    <h2>Will you be my Valentine? 💍</h2>
+    <h2>Will you be my Valentine? </h2>
     <div class="buttons">
-        <button id="yes" onclick="yes()">YES 💖</button>
-        <button id="no" onclick="nope()">NO 😝</button>
+        <button onclick="yes()">YES 💖</button>
+        <button id="no" onclick="hideNo()">NO 😝</button>
     </div>
 </section>
 
 <section id="closing">
     <h1>LOBIUU KICAAA 💕</h1>
     <img src="kicaa.jpg">
-    <p>semoga kamu seneng liat ini 🤍</p>
+    <p>Terimakasih sudah jadi bagian terindah di hidup aku 💖</p>
 </section>
 
 <script>
 const music = document.getElementById("bgMusic");
-music.volume = 0;
+const heartsEl = document.getElementById("hearts");
+
+const emojis = ["❤️","💖","🌸","💐","💗","💞"];
 
 const messageText = `
 Kicaaa,
@@ -278,37 +287,29 @@ Happy Valentine, Kicaa 💖
 
 `;
 
-let i = 0;
-function typeMessage(){
-    if(i < messageText.length){
-        typing.innerHTML += messageText.charAt(i++);
-        setTimeout(typeMessage, 20);
-    }
-}
+let index = 0;
 
-function fadeMusic(){
-    let v = 0;
-    const f = setInterval(()=>{
-        if(v < 1){ v += 0.03; music.volume = v; }
-        else clearInterval(f);
-    },100);
+function typeMessage(){
+    if(index < messageText.length){
+        document.getElementById("typing").innerHTML += messageText.charAt(index);
+        index++;
+        setTimeout(typeMessage, 25);
+    }
 }
 
 function startLove(){
     music.play().catch(()=>{});
-    fadeMusic();
     nextSection("message");
     typeMessage();
 }
 
 function nextSection(id){
-    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
     document.getElementById(id).classList.add("active");
 }
 
-function nope(){
-    document.getElementById("no").classList.add("hide");
-    document.getElementById("yes").classList.add("big");
+function hideNo(){
+    document.getElementById("no").style.display = "none";
 }
 
 function yes(){
@@ -316,31 +317,29 @@ function yes(){
     launchConfetti();
 }
 
-function hearts(){
-    const emojis = ["❤️","💖","💘","🌸"];
-    setInterval(()=>{
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
-        h.style.left = Math.random()*100+"vw";
-        h.style.fontSize = Math.random()*20+15+"px";
-        heartsEl.appendChild(h);
-        setTimeout(()=>h.remove(),6000);
-    },300);
+/* EMOJI JATUH BEDA-BEDA */
+function spawnEmoji(){
+    const el = document.createElement("div");
+    el.className = "fall-item";
+    el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = Math.random() * 20 + 20 + "px";
+    el.style.animationDuration = Math.random() * 3 + 4 + "s";
+    heartsEl.appendChild(el);
+    setTimeout(() => el.remove(), 8000);
 }
-const heartsEl = document.getElementById("hearts");
+
+setInterval(spawnEmoji, 250);
 
 function launchConfetti(){
+    const c = document.getElementById("confetti");
     for(let i=0;i<80;i++){
         const p = document.createElement("div");
         p.style.left = Math.random()*100+"vw";
         p.style.animationDelay = Math.random()*2+"s";
-        confetti.appendChild(p);
+        c.appendChild(p);
     }
 }
-const confetti = document.getElementById("confetti");
-
-hearts();
 </script>
 
 </body>
