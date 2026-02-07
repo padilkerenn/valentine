@@ -18,12 +18,13 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== SECTION ===== */
 section {
     display: none;
     opacity: 0;
     min-height: 100vh;
     padding: 40px 20px;
-    transition: opacity 1s ease;
+    transition: opacity 0.8s ease;
 }
 
 section.active {
@@ -34,6 +35,7 @@ section.active {
     opacity: 1;
 }
 
+/* ===== HERO ===== */
 #hero { text-align: center; }
 
 .name {
@@ -61,6 +63,7 @@ section.active {
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ===== FLOWER ===== */
 .photo-wrapper {
     margin: 20px 0;
     width: 220px;
@@ -79,6 +82,7 @@ section.active {
     50% { transform: translateY(-10px); }
 }
 
+/* ===== BUTTON ===== */
 button {
     margin-top: 25px;
     padding: 14px 35px;
@@ -93,9 +97,9 @@ button {
 
 button:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(255,107,157,0.8);
 }
 
+/* ===== MESSAGE ===== */
 #message {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -111,6 +115,7 @@ button:hover {
     min-height: 300px;
 }
 
+/* ===== HEARTS ===== */
 .falling-hearts {
     position: fixed;
     inset: 0;
@@ -129,6 +134,7 @@ button:hover {
     to { transform: translateY(110vh); }
 }
 
+/* ===== INTERACTIVE ===== */
 #interactive {
     background: rgba(255,255,255,0.95);
     border-radius: 20px;
@@ -143,12 +149,26 @@ button:hover {
     margin-top: 30px;
 }
 
-#no {
-    background: #f1f1f1;
-    color: #d63384;
-    position: fixed;
+/* YES NORMAL */
+#yes {
+    font-size: 1.2rem;
 }
 
+/* YES BIG */
+#yes.big {
+    transform: scale(1.6);
+    box-shadow: 0 0 40px rgba(255,107,157,1);
+}
+
+/* NO HIDE */
+#no.hide {
+    opacity: 0;
+    transform: scale(0.3);
+    pointer-events: none;
+    transition: 0.4s ease;
+}
+
+/* ===== CLOSING ===== */
 #closing img {
     width: 200px;
     height: 200px;
@@ -159,6 +179,7 @@ button:hover {
     animation: float 3s ease-in-out infinite;
 }
 
+/* ===== CONFETTI ===== */
 .confetti {
     position: fixed;
     inset: 0;
@@ -205,15 +226,15 @@ button:hover {
 <section id="interactive">
     <h2>Will you be my Valentine? 💍</h2>
     <div class="buttons">
-        <button onclick="yes()">YES 💖</button>
-        <button id="no">NO 😝</button>
+        <button id="yes" onclick="yes()">YES 💖</button>
+        <button id="no" onclick="nope()">NO 😝</button>
     </div>
 </section>
 
 <section id="closing">
-    <h1>LOBIUUUU KICAAA 💕</h1>
-    <img src="kicaa.jpg" onclick="alert('aku sayang kamu 🤍')">
-    <p id="closingText"></p>
+    <h1>LOBIUU KICAAA 💕</h1>
+    <img src="kicaa.jpg">
+    <p>semoga kamu seneng liat ini 🤍</p>
 </section>
 
 <script>
@@ -243,28 +264,39 @@ dan belajar apa artinya pulang.
 kamu bukan cuma orang yang aku sayang,
 tapi juga rumah buat hati aku.
 
+kalo suatu hari aku lagi ga banyak kata,
+percaya yaa… rasa ini ga pernah berkurang.
+aku cuma lagi nyimpen semuanya
+biar bisa aku jagain lebih lama.
+
+terimakasih udah bertahan sejauh ini sama aku,
+ayo kita jalan bareng terus,
+pelan-pelan gapapa,
+yang penting bareng-bareng.
+
 Happy Valentine, Kicaa 💖
+
 `;
 
-let index = 0;
+let i = 0;
 function typeMessage(){
-    if(index < messageText.length){
-        typing.innerHTML += messageText.charAt(index++);
+    if(i < messageText.length){
+        typing.innerHTML += messageText.charAt(i++);
         setTimeout(typeMessage, 20);
     }
 }
 
-function fadeInMusic(){
+function fadeMusic(){
     let v = 0;
-    const fade = setInterval(()=>{
-        if(v < 1){ v += 0.02; music.volume = v; }
-        else clearInterval(fade);
+    const f = setInterval(()=>{
+        if(v < 1){ v += 0.03; music.volume = v; }
+        else clearInterval(f);
     },100);
 }
 
 function startLove(){
     music.play().catch(()=>{});
-    fadeInMusic();
+    fadeMusic();
     nextSection("message");
     typeMessage();
 }
@@ -274,43 +306,18 @@ function nextSection(id){
     document.getElementById(id).classList.add("active");
 }
 
-const noTexts = ["eh 😝","ngga bisaa","hehe kabur","coba lagi 😜"];
-let noIndex = 0;
-const noBtn = document.getElementById("no");
-
-function moveNo(){
-    noBtn.innerText = noTexts[noIndex++ % noTexts.length];
-
-    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-
-    noBtn.style.left = Math.random()*maxX + "px";
-    noBtn.style.top = Math.random()*maxY + "px";
-
-    if(navigator.vibrate) navigator.vibrate(50);
+function nope(){
+    document.getElementById("no").classList.add("hide");
+    document.getElementById("yes").classList.add("big");
 }
-
-noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
 
 function yes(){
     nextSection("closing");
     launchConfetti();
-    typeClosing();
 }
-
-const closingText = "Aku harap kamu senyum pas baca ini 🤍";
-let c = 0;
-function typeClosing(){
-    if(c < closingText.length){
-        closingTextEl.innerHTML += closingText.charAt(c++);
-        setTimeout(typeClosing,60);
-    }
-}
-const closingTextEl = document.getElementById("closingText");
 
 function hearts(){
-    const emojis = ["❤️","💖","💘","💞","🌸"];
+    const emojis = ["❤️","💖","💘","🌸"];
     setInterval(()=>{
         const h = document.createElement("div");
         h.className = "heart";
