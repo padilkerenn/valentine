@@ -112,7 +112,7 @@ button:hover {
 }
 
 #typing {
-    font-family: 'Pacifico', cursive;
+    font-family: 'Pacifico', cursive !important;
     font-size: 1.25rem;
     line-height: 2;
     white-space: pre-line;
@@ -303,8 +303,12 @@ function typeMessage(){
 function startLove(){
     music.play().catch(()=>{});
     nextSection("message");
-    typeMessage();
+
+    document.fonts.ready.then(() => {
+        typeMessage();
+    });
 }
+
 
 function nextSection(id){
     document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
